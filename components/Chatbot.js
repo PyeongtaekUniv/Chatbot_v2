@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 
 const Chatbot = () => {
@@ -12,24 +11,36 @@ const Chatbot = () => {
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
-    setMessages([...messages, { text: input, type: "user" }]);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { text: input, type: "user" },
+    ]);
     setInput("");
 
-    // Send this input to the API to get a response.
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ input }),
-    });
+    try {
+      // Send this input to the API to get a response.
+      const response = await fetch("http://127.0.0.1:5000/get-answer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question: input }),
+      });
 
-    const data = await response.json();
-    setMessages([
-      ...messages,
-      { text: input, type: "user" },
-      { text: data.output, type: "bot" },
-    ]);
+      const data = await response.json();
+      const botResponse = data.answer.result; // API 응답에서 result 값을 가져옵니다.
+
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: botResponse, type: "bot" },
+      ]);
+    } catch (error) {
+      console.error("Error fetching data from the API:", error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: "서버와의 통신 중 오류가 발생했습니다.", type: "bot" },
+      ]);
+    }
   };
 
   return (
