@@ -1,18 +1,34 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
 import styles from "../styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const Chatbot = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const textAreaRef = useRef(null);
+
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   const handleInputChange = (e) => {
     setInput(e.target.value);
+    const textArea = textAreaRef.current;
+    textArea.style.height = "inherit"; // 높이 초기화
+    textArea.style.height = `${textArea.scrollHeight}px`; // 내용물에 맞게 높이 조정
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // Enter가 눌렸을 때의 기본 이벤트 방지
       sendMessage();
     }
   };
@@ -20,11 +36,10 @@ const Chatbot = () => {
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { text: input, type: "user" },
-    ]);
+    const newMessage = { text: input, type: "user" };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
     setInput("");
+    setIsLoading(true);
 
     try {
       // Send this input to the API to get a response.
@@ -35,6 +50,10 @@ const Chatbot = () => {
         },
         body: JSON.stringify({ question: input }),
       });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
 
       const data = await response.json();
       const botResponse = data.answer.result; // API 응답에서 result 값을 가져옵니다.
@@ -48,6 +67,8 @@ const Chatbot = () => {
         ...prevMessages,
         { text: "서버와의 통신 중 오류가 발생했습니다.", type: "bot" },
       ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -122,44 +143,60 @@ const Chatbot = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col overflow-y-auto mb-4">
+            <div className="flex flex-col overflow-y-auto space-y-4 p-4 mb-4">
               {messages.map((message, idx) => (
                 <div
                   key={idx}
-                  className={`mb-2 ${
-                    message.type === "user" ? "text-right" : "text-left"
+                  className={`w-4/5 mx-auto ${
+                    message.type === "user" ? "self-end" : "self-start"
                   }`}
                 >
                   <span
-                    className={`py-1 px-3 rounded ${
+                    className={`inline-block w-full px-4 py-2 rounded-lg ${
                       message.type === "user"
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-300 text-black"
+                        ? "bg-blue-500 text-white rounded-br-none"
+                        : "bg-gray-200 text-black rounded-bl-none"
                     }`}
                   >
                     {message.text}
                   </span>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
           )}
-          <div className={`flex mx-[10%] border  overflow-hidden `}>
-            <input
-              type="text"
+          <div className={`flex mx-[10%] border rounded-xl`}>
+            <textarea
+              ref={textAreaRef}
               value={input}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
-              className="flex-1  px-4 py-3 rounded-l-l bg-gray-100 text-black"
+              className="flex-1 px-4 py-3 rounded-l-xl bg-gray-100 text-black focus:outline-none"
+              style={{
+                minHeight: "20px",
+                height: "40px",
+                maxHeight: "180px",
+                // 스크롤바 숨기기
+                resize: "none", // 크기 조절 불가능하게 설정
+                lineHeight: "1.5", // 행간 설정
+              }}
             />
             <div
-              onClick={sendMessage}
-              className="bg-gray-100 text-black px-4 py-2"
+              onClick={!isLoading ? sendMessage : null} // 로딩 중이 아닐 때만 sendMessage 함수를 호출
+              className={`${styles.flexCenter} rounded-r-xl bg-gray-100 text-black px-4 py-2  `}
             >
-              <FontAwesomeIcon
-                icon="fa-solid fa-paper-plane"
-                style={{ color: "#fafbfc" }}
-                className="w-[100px] h-[100px]"
-              />
+              {!isLoading ? (
+                <FontAwesomeIcon
+                  icon={faPaperPlane}
+                  style={{ color: "black" }}
+                  className="w-[20px] h-[20px] cursor-pointer"
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  className="fa-spin w-[20px] h-[20px]"
+                />
+              )}
             </div>
           </div>
         </div>

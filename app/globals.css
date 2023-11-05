@@ -22,3 +22,30 @@ body,
 .h-full {
   height: 100%;
 }
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.typing-animation {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+  /* Adjust the timing above (2s and 40 steps) to control speed of typing */
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: black;
+  }
+}

@@ -12,6 +12,7 @@ const Sidebar = () => {
         <button
           src=""
           className=" text-[15px] rounded-lg border-[1px]  border-solid bg-white px-2 py-0.5 text-black shadow-sm hover:shadow-none  "
+          onClick={() => window.location.reload()}
         >
           New Chat
         </button>
