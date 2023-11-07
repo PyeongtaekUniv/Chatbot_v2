@@ -43,7 +43,7 @@ const Chatbot = () => {
 
     try {
       // Send this input to the API to get a response.
-      const response = await fetch("/api/get-answer", {
+      const response = await fetch("http://127.0.0.1:5000/get-answer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,6 +62,8 @@ const Chatbot = () => {
         ...prevMessages,
         { text: botResponse, type: "bot" },
       ]);
+      const textArea = textAreaRef.current;
+      textArea.style.height = "40px";
     } catch (error) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -75,7 +77,9 @@ const Chatbot = () => {
   return (
     <div className="h-screen flex flex-col ">
       <div className={` ${styles.flexCenter} my-auto`}>
-        <div className={` flex-grow  overflow-y-auto space-y-40`}>
+        <div
+          className={` flex-grow  overflow-y-auto max-h-[calc(100vh-100px)]`}
+        >
           {messages.length === 0 ? (
             <div
               className={`${styles.flexCenter} w-[100%]  max-w-3xl xl:max-w-4xl mx-auto`}
@@ -157,6 +161,7 @@ const Chatbot = () => {
                         ? "bg-blue-500 text-white rounded-br-none"
                         : "bg-gray-200 text-black rounded-bl-none"
                     }`}
+                    style={{ wordBreak: "break-word" }}
                   >
                     {message.text}
                   </span>
@@ -165,38 +170,40 @@ const Chatbot = () => {
               <div ref={messagesEndRef} />
             </div>
           )}
-          <div className={`flex mx-[10%] border rounded-xl`}>
-            <textarea
-              ref={textAreaRef}
-              value={input}
-              onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
-              className="flex-1 px-4 py-3 rounded-l-xl bg-gray-100 text-black focus:outline-none"
-              style={{
-                minHeight: "20px",
-                height: "40px",
-                maxHeight: "180px",
-                // 스크롤바 숨기기
-                resize: "none", // 크기 조절 불가능하게 설정
-                lineHeight: "1.5", // 행간 설정
-              }}
-            />
-            <div
-              onClick={!isLoading ? sendMessage : null} // 로딩 중이 아닐 때만 sendMessage 함수를 호출
-              className={`${styles.flexCenter} rounded-r-xl bg-gray-100 text-black px-4 py-2  `}
-            >
-              {!isLoading ? (
-                <FontAwesomeIcon
-                  icon={faPaperPlane}
-                  style={{ color: "black" }}
-                  className="w-[20px] h-[20px] cursor-pointer"
-                />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faSpinner}
-                  className="fa-spin w-[20px] h-[20px]"
-                />
-              )}
+          <div className="flex-shrink-0 py-20">
+            <div className={`flex mx-[10%] rounded-xl mb-2 `}>
+              <textarea
+                ref={textAreaRef}
+                value={input}
+                onChange={handleInputChange}
+                onKeyPress={handleKeyPress}
+                className="flex-1 px-4 py-3 rounded-l-xl bg-gray-100 text-black focus:outline-none"
+                style={{
+                  minHeight: "20px",
+                  height: "40px",
+                  maxHeight: "180px",
+                  resize: "none",
+                  lineHeight: "1.5", //
+                  wordBreak: "break-word",
+                }}
+              />
+              <div
+                onClick={!isLoading ? sendMessage : null} // 로딩 중이 아닐 때만 sendMessage 함수를 호출
+                className={`${styles.flexCenter} rounded-r-xl bg-gray-100 text-black px-4 py-2  `}
+              >
+                {!isLoading ? (
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    style={{ color: "black" }}
+                    className="w-[20px] h-[20px] cursor-pointer"
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    className="fa-spin w-[20px] h-[20px]"
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>

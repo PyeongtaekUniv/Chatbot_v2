@@ -1,37 +1,51 @@
 "use client";
 
-import Chatbot from "../components/Chatbot";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import React, { useState, useRef, useEffect } from "react";
+import { Sidebar, SidebarMobile, Navbar, Chatbot } from "../components";
 import styles from "../styles";
 
 const Page = () => {
-  return (
-    <div className={``}>
-      {/* <div className="flex flex-row bg-white   text-white py-4 pr-4 pl-2 mb-4">
-        <img src="/icons/symbol.png" className="w-[30px] h-[30px] mr-2" />
-        <h1 className="font-semibold leading-7 text-[18px] text-black mr-3">
-          ChatPyeongTaek
-        </h1>
-        <button
-          src=""
-          className=" text-light rounded-lg border-[1px]  border-solid bg-white px-2 py-0.5 text-black shadow-md hover:shadow-none  "
-        >
-          New Chat
-        </button>
-      </div> */}
-      <div className="flex flex-row h-full">
-        <Sidebar />
-        <div className="w-full min-h-screen">
-          <Chatbot />
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+
+    handleResize(); // Check initial screen size
+    window.addEventListener("resize", handleResize); // Add event listener for window resize
+
+    return () => {
+      window.removeEventListener("resize", handleResize); // Cleanup on component unmount
+    };
+  }, []);
+
+  const renderDesktop = () => {
+    return (
+      <>
+        <div className="flex flex-row h-full">
+          <Sidebar />
+          <div className="w-full min-h-screen">
+            <Chatbot />
+          </div>
         </div>
-      </div>
-      {/* Footer */}
-      {/* <footer className="bg-blue-500 text-white p-6 mt-4">
-        © 2023 Your Chatbot. All rights reserved.
-      </footer> */}
-    </div>
-  );
+      </>
+    );
+  };
+
+  const renderMobile = () => {
+    return (
+      <>
+        <div className="flex flex-row h-full">
+          <SidebarMobile />
+          <div className="w-full min-h-screen">
+            <Chatbot />
+          </div>
+        </div>
+      </>
+    );
+  };
+  return <>{isSmallScreen ? renderMobile() : renderDesktop()}</>;
 };
 
 export default Page;

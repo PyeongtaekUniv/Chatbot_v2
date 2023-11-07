@@ -24,7 +24,9 @@ const Sidebar = () => {
         <div className="items-end">
           <ul>
             <li className="mb-2 text-black">Theme</li>
-            <li className="mb-2 text-black">Feedback</li>
+            <li className="mb-2 text-black">
+              <a href="mailto:nabsj@ptu.ac.kr?subject=Feedback">Feedback</a>
+            </li>
             <li className="mb-2 text-black">About</li>
           </ul>
         </div>
