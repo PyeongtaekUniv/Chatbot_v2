@@ -11,23 +11,26 @@ const SidebarMobile = () => {
 
   return (
     <>
-      <div className="md:hidden fixed z-10 top-0 left-0 right-0 flex items-center justify-between p-4 bg-white">
+      <div className="md:hidden fixed z-10 top-0 left-0 right-0 flex items-center justify-between p-4 bg-[#343541] border-b border-[#61616c]">
         {/* 버거 아이콘 버튼 */}
         <button onClick={toggleSidebar}>
           <FontAwesomeIcon
             icon={faBars}
+            style={{ color: "white" }}
             className="text-black w-[20px] h-[20px] cursor-pointer"
           />
         </button>
 
         {/* 중간 내용: "New Chat" 버튼 */}
-        <p>New Chat</p>
+        <p className="text-white">New Chat</p>
 
         {/* 끝 내용: '+' 버튼 */}
         <button>
           <FontAwesomeIcon
             icon={faPlus}
+            style={{ color: "white" }}
             className="text-black w-[20px] h-[20px] cursor-pointer"
+            onClick={() => window.location.reload()}
           />
         </button>
       </div>
@@ -36,7 +39,7 @@ const SidebarMobile = () => {
       <div
         className={`fixed inset-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-20 bg-white w-full shadow-lg`}
+        } transition-transform duration-300 ease-in-out z-20 bg-[#202123] w-full shadow-lg`}
       >
         <div className="flex flex-col h-screen">
           {/* 닫기 버튼 */}
@@ -56,16 +59,16 @@ const SidebarMobile = () => {
               {/* 여기에 'justify-between' 클래스를 추가했습니다. */}
               <div className="flex flex-row items-center">
                 <img
-                  src="/icons/symbol.png"
+                  src="/icons/Daejung.png"
                   className="w-[30px] h-[30px] mr-2"
                   alt="Logo"
                 />
-                <h1 className="font-semibold leading-7 text-[16px] text-black mr-3">
+                <h1 className="font-semibold leading-7 text-[16px] text-gray-400  mr-3">
                   ChatPyeongTaek
                 </h1>
               </div>
               <button
-                className="text-[15px] rounded-lg border-[1px] border-solid bg-white px-2 py-0.5 text-black shadow-sm hover:shadow-none"
+                className="text-[15px] rounded-lg border-[1px] border-solid border-[#4d4d4f] text-[#ffffff] bg-[#202123] px-2 py-0.5  shadow-sm hover:shadow-none"
                 onClick={() => window.location.reload()}
               >
                 New Chat
@@ -73,11 +76,11 @@ const SidebarMobile = () => {
             </div>
             <div className="mt-10">
               <ul>
-                <li className="mb-2 text-black">Theme</li>
-                <li className="mb-2 text-black">
+                <li className="mb-2 text-[#ffffff]">Theme</li>
+                <li className="mb-2 text-[#ffffff]">
                   <a href="mailto:nabsj@ptu.ac.kr?subject=Feedback">Feedback</a>
                 </li>
-                <li className="mb-2 text-black">About</li>
+                <li className="mb-2 text-[#ffffff]">About</li>
               </ul>
             </div>
           </div>

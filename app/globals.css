@@ -49,3 +49,20 @@ body,
     border-color: black;
   }
 }
+
+.custom-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.custom-scroll {
+  scrollbar-width: none;
+}
+
+body {
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
