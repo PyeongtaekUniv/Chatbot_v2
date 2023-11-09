@@ -101,7 +101,7 @@ const Chatbot = () => {
     } catch (error) {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: "서버와의 통신 중 오류가 발생했습니다.", type: "bot" },
+        { text: "죄송합니다. 답변생성이 지연되고 있습니다. 다시 질문바랍니다.", type: "bot" },
       ]);
     } finally {
       setIsLoading(false);
