@@ -23,6 +23,11 @@ body,
   height: 100%;
 }
 
+body {
+  background-color: #343541;
+  min-width: 100vw;
+}
+
 @keyframes typing {
   from {
     width: 0;
@@ -66,3 +71,4 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+

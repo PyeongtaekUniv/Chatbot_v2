@@ -37,10 +37,14 @@ const Chatbot = () => {
   const handleInputChange = (e) => {
     setInput(e.target.value);
     const textArea = textAreaRef.current;
-    // 내용이 현재 공간보다 큰 경우에만 textarea를 확장
-    if (textArea.scrollHeight > textArea.offsetHeight) {
-      textArea.style.height = "inherit"; // 높이 초기화
-      textArea.style.height = `${textArea.scrollHeight}px`; // 내용에 기반하여 높이 설정
+
+    // 입력에 따라 높이 조정
+    textArea.style.height = "auto"; // 높이를 잠시 'auto'로 설정하여 scrollHeight를 다시 계산하게 함
+    const newHeight = `${Math.max(textArea.scrollHeight, 30)}px`; // 40px는 최소 높이
+
+    // 입력이 줄어들었을 때만 높이를 감소
+    if (textArea.style.height !== newHeight) {
+      textArea.style.height = newHeight;
     }
   };
 
@@ -55,8 +59,11 @@ const Chatbot = () => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // Enter가 눌렸을 때의 기본 이벤트 방지
+      e.preventDefault(); // Enter의 기본 동작 방지
       sendMessage();
+
+      // 메시지 전송 후 textarea를 리셋합니다.
+      setInput(""); // 이 부분이 setState를 사용하여 input 상태를 리셋하는 코드가 되어야 합니다.
     }
   };
 
@@ -98,11 +105,16 @@ const Chatbot = () => {
       ]);
     } finally {
       setIsLoading(false);
+      const textArea = textAreaRef.current;
+      if (textArea) {
+        textArea.style.height = "40px";
+        textArea.scrollTop = 0; // 스크롤을 맨 위로 설정
+      }
     }
   };
 
   return (
-    <div className="h-screen flex flex-col bg-[#343541] ">
+    <div className="h-screen flex flex-col bg-[#343541] relative ">
       <div className={` ${styles.flexCenter} my-auto`}>
         <div
           className={` flex-grow  overflow-y-auto max-h-[calc(100vh-100px)]`}
@@ -224,15 +236,22 @@ const Chatbot = () => {
               {messages.map((message, idx) => (
                 <div
                   key={idx}
-                  className={`w-4/5 mx-auto ${
-                    message.type === "user" ? "self-end" : "self-start"
+                  className={`flex ${
+                    message.type === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
+                  {message.type === "bot" && (
+                    <img
+                      src="/icons/Daejung.png" // 이곳에 실제 봇 아이콘의 이미지 경로를 넣으세요.
+                      alt="Bot"
+                      className="w-6 h-6 mt-1 self-start mr-3 rounded-full" // 아이콘 크기와 여백을 조정하세요.
+                    />
+                  )}
                   <span
                     className={`inline-block w-full px-4 py-5 rounded-lg ${
                       message.type === "user"
-                        ? "bg-[#343541] text-white  px-5 py-3"
-                        : "bg-[#444654] text-white "
+                        ? "bg-[#343541] text-white px-5 py-3"
+                        : "bg-[#444654] text-white"
                     }`}
                     style={{ wordBreak: "break-word" }}
                   >
@@ -245,17 +264,18 @@ const Chatbot = () => {
           )}
           <div className="flex-shrink-0 md:py-20 ">
             {isSmallScreen ? (
-              <div className="fixed bottom-0 left-0 right-0 pb-safe bg-[#343541] shadow-lg">
-                <div className={`flex mx-[10%] mb-2 `}>
+              <div className="fixed bottom-0 left-0 items-center  right-0 pb-safe bg-[#343541] shadow-lg p-4">
+                <div className={`flex mx-[5%] mb-3 `}>
                   <textarea
                     ref={textAreaRef}
                     value={input}
                     onChange={handleInputChange}
                     onKeyPress={handleKeyPress}
                     placeholder="Ask Anything"
-                    className="flex-1 px-4 py-3 rounded-l-xl bg-[#40414F] text-[#ffffff] focus:outline-none"
+                    rows={1}
+                    className="flex-1 px-4 py-3 rounded-l-xl  bg-[#40414F] text-[#ffffff] focus:outline-none"
                     style={{
-                      minHeight: "20px",
+                      minHeight: "40px",
                       height: "40px",
                       maxHeight: "180px",
                       resize: "none",
@@ -283,7 +303,9 @@ const Chatbot = () => {
                 </div>
               </div>
             ) : (
-              <div className={`flex mx-[10%] rounded-xl mb-2 `}>
+              <div
+                className={`flex px-[10%] rounded-xl mb-2 absolute bottom-7 w-full `}
+              >
                 <textarea
                   ref={textAreaRef}
                   value={input}
@@ -292,7 +314,7 @@ const Chatbot = () => {
                   placeholder="Ask Anything"
                   className="flex-1 px-4 py-3 rounded-l-xl bg-[#40414F] text-[#ffffff] focus:outline-none"
                   style={{
-                    minHeight: "20px",
+                    minHeight: "40px",
                     height: "40px",
                     maxHeight: "180px",
                     resize: "none",

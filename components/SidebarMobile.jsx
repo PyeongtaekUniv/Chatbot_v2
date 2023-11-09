@@ -98,7 +98,7 @@ const SidebarMobile = () => {
       {/* 페이지 나머지 내용 */}
       <div className={`flex flex-1 ${isSidebarOpen ? "filter blur-sm" : ""}`}>
         {/* 페이지 내용은 여기에 들어갑니다. */}
-        {/* 예를 들어, 메인 컨텐츠나 다른 컴포넌트들... */}
+        {/* 예를 들어, 메인 컨텐츠나 다른 컴포넌트들… */}
       </div>
     </>
   );
