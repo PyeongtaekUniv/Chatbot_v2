@@ -101,7 +101,7 @@ const Chatbot = () => {
     } catch (error) {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: "죄송합니다. 답변생성이 지연되고 있습니다. 다시 질문바랍니다.", type: "bot" },
+        { text: "서버와의 통신 중 오류가 발생했습니다.", type: "bot" },
       ]);
     } finally {
       setIsLoading(false);
@@ -142,26 +142,35 @@ const Chatbot = () => {
                         text-[#937102] `}
                       >
                         {" "}
-                        v1.2b
+                        v1.3b
                       </div>
                     </div>
-                    <p className="text-[16px] md:pl-2 text-gray-400 px-5 md:px-0">
-                      한국어 LM으로 만든 평택대학교 서비스 <br /> ChatPyeongTaek
-                    </p>
+                    <div className="flex flex-col">
+                      <p className="text-[16px] md:pl-2 text-gray-400 px-5 md:px-0">
+                        한국어 LM으로 만든 평택대학교 서비스 <br />{" "}
+                        ChatPyeongTaek
+                      </p>
+                      <p className="text-[10px] text-gray-400 md:pl-2 px-5">
+                        현재 얼리액세스 기간입니다. 사용자가 요청한 질문, 답변,{" "}
+                        <br />
+                        IP정보가 저장되며 모델 고도화 작업용으로만 사용됩니다.
+                      </p>
+                    </div>
                   </div>
                   {/* <div
                     className={`${styles.flexStart} text-start sm:pt-4 space-y-6 rounded-xl border w-[50%] flex-col`}
                   >
-                    <p className="px-4 text-sm">
+                    <p className="px-4 text-sm text-white">
                       Using Model <br />
                       ChatGPT OpenSource
                     </p>
                     <div
-                      className={`rounded-xl bg-[#F3F4F6] h-full px-4 ${styles.flexCenter} flex-row space-x-14`}
+                      className={`rounded-xl bg-[#343541] h-full px-4 ${styles.flexCenter} flex-row space-x-14`}
                     >
-                      <p className="text-[14px]">Model</p>
-                      <p className="text-[14px]">Datest</p>
-                      <p className="text-[14px]">Github</p>
+                      <p className="text-[14px] text-gray-300">
+                        현재 얼리액세스 기간입니다. 사용자가 요청한 질문, 답변,
+                        IP정보가 저장되며 모델 고도화 작업용으로만 사용됩니다.
+                      </p>
                     </div>
                   </div> */}
                 </div>
@@ -232,7 +241,7 @@ const Chatbot = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col overflow-y-auto space-y-4 p-4 mb-4">
+            <div className="flex flex-col overflow-y-auto space-y-4 p-4 mb-4 lg:mx-[10%] xl:mx-[13%] xxl:mx-[16%]">
               {messages.map((message, idx) => (
                 <div
                   key={idx}
@@ -248,7 +257,7 @@ const Chatbot = () => {
                     />
                   )}
                   <span
-                    className={`inline-block w-full px-4 py-5 rounded-lg ${
+                    className={`inline-block w-full px-4  py-5 rounded-lg ${
                       message.type === "user"
                         ? "bg-[#343541] text-white px-5 py-3"
                         : "bg-[#444654] text-white"

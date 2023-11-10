@@ -24,7 +24,9 @@ const Sidebar = () => {
         <h1 className="text-xl font-bold mb-4"></h1>
         <div className="items-end">
           <ul>
-            <li className="mb-5 text-[14px] text-[#ffffff]">Theme</li>
+            <li className="mb-5 text-[14px] text-[#ffffff] cursor-pointer">
+              Theme
+            </li>
             <li className="mb-5 text-[14px] text-[#ffffff]">
               {/* <a href="mailto:nabsj@ptu.ac.kr?subject=Feedback">Feedback</a> */}
               <a
@@ -34,7 +36,9 @@ const Sidebar = () => {
                 Feedback
               </a>
             </li>
-            <li className="mb-5 text-[14px] text-[#ffffff]">About</li>
+            <li className="mb-5 text-[14px] text-[#ffffff] cursor-pointer">
+              <a href="/about">About</a>
+            </li>
           </ul>
         </div>
       </div>

@@ -76,11 +76,13 @@ const SidebarMobile = () => {
             </div>
             <div className="mt-10">
               <ul>
-                <li className="mb-2 text-[#ffffff]">Theme</li>
-                <li className="mb-2 text-[#ffffff]">
+                <li className="mb-2 text-[#ffffff]  cursor-pointer">Theme</li>
+                <li className="mb-2 text-[#ffffff]  cursor-pointer">
                   <a href="mailto:nabsj@ptu.ac.kr?subject=Feedback">Feedback</a>
                 </li>
-                <li className="mb-2 text-[#ffffff]">About</li>
+                <li className="mb-5 text-[14px] text-[#ffffff] cursor-pointer">
+                  <a href="/about">About</a>
+                </li>
               </ul>
             </div>
           </div>
